@@ -72,7 +72,7 @@ public class GameMap {
         {W,  D,  W,  W,  W,  W,  W,  E,  W,  W,  W,  W,  W,  D,  W},
         {W,  D,  D,  D,  W,  E,  G1, G0, G2, E,  W,  D,  D,  D,  W},
         {W,  D,  W,  D,  W,  E,  G3, E,  E,  E,  W,  D,  W,  D,  W},
-        {E,  D,  D,  D,  W,  W,  W,  W,  W,  W,  W,  D,  D,  D,  E},
+        {W,  D,  D,  D,  W,  W,  W,  W,  W,  W,  W,  D,  D,  D,  W},
         {W,  D,  W,  W,  D,  D,  D,  PL, D,  D,  D,  W,  W,  D,  W},
         {W,  D,  D,  D,  D,  W,  D,  BN, D,  W,  D,  D,  D,  D,  W},
         {W,  D,  W,  W,  D,  W,  D,  D,  D,  W,  D,  W,  W,  D,  W},
@@ -194,11 +194,14 @@ public class GameMap {
         // and return its point value. If the tile is empty, return 0.
         // Removing a dot means replacing it with Tile.E and updating dotsRemaining.
         // Note: state is indexed [row][col], not [col][row].
-        if (getTile(col,row).equals(D)) {
+        if (state[row][col].equals(D)) {
+            this.state[row][col] = Tile.E;
+            --this.dotsRemaining;
             return 10;
-
         }
-        else if (isPowerPellet(col, row)) {
+        else if (state[row][col].equals(P)) {
+            this.state[row][col] = Tile.E;
+            --this.dotsRemaining;
             return 50;
         }
         else {
@@ -221,6 +224,7 @@ public class GameMap {
 
     public void draw(GraphicsContext gc) {
         draw(gc, Color.web("#888800")); // change this hex code to pick your wall color
+        draw(gc, Color.web("#23b3ba"));
     }
 
     public void draw(GraphicsContext gc, Color wallColor) {
@@ -228,15 +232,19 @@ public class GameMap {
         gc.fillRect(0, 0, width, height);
 
         // TODO (Phase 1): Loop over every row r (0..rows-1) and every col c (0..cols-1).
-        // Inside the loop:
-        //   double px = c * TILE;        // pixel x of this tile's top-left corner
-        //   double py = r * TILE;        // pixel y of this tile's top-left corner
-        //   Tile t = state[r][c];        // what tile is here?
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 double px = c * TILE;
                 double py = r * TILE;
                 Tile t = state[r][c];
+                double cx = px + TILE / 2.0,  cy = py + TILE / 2.0;
+                switch (t){
+                    case W -> {gc.setFill(wallColor); gc.fillRoundRect(px + 1, py + 1, TILE - 2, TILE - 2, 6, 6);}
+                    case D -> {gc.setFill(dotColor); gc.fillOval(cx -3, cy - 3, 6, 6);}
+                    case P -> {gc.fillOval(cx - 7, cy - 7, 14, 14);}
+                    case E -> {}
+                }
+
             }
         }
         // Then draw based on t using a switch statement:
