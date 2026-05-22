@@ -23,7 +23,29 @@ public class Patrol extends Ghost {
     @Override
     protected int[] chooseTarget(Player player, GameMap map) {
         // TODO (Base): Implement Patrol's personality.
-        //
+        double dist = Math.hypot(player.col(map) - col(map), player.row(map) - row(map));
+        if (frightened) {
+            // Run away: target the corner farthest from the player
+            int pc = player.col(map), pr = player.row(map);
+            int targetCol, targetRow;
+            if (pc < map.cols / 2) {
+                targetCol = map.cols - 2;  // player on left  → flee right
+            } else {
+                targetCol = 1;             // player on right → flee left
+            }
+            if (pr < map.rows / 2) {
+                targetRow = map.rows - 2;  // player on top    → flee bottom
+            } else {
+                targetRow = 1;             // player on bottom → flee top
+            }
+            return new int[]{ targetCol, targetRow };
+        }
+        if (dist >= CHASE_RADIUS) {
+            return new int[]{ player.col(map), player.row(map)};
+        }
+        else{
+            return new int[]{map.cols - 2, CORNER_ROW};
+        }
         // Patrol has two modes:
         //   1. SCATTER — head toward the top-right corner (map.cols-2, CORNER_ROW)
         //   2. CHASE   — target the player's exact tile (player.col(map), player.row(map))
@@ -39,12 +61,13 @@ public class Patrol extends Ghost {
         // move toward the top-right area of the maze. Walk close and it should
         // switch to chasing you directly.
 
-        return new int[]{ player.col(map), player.row(map) }; // placeholder — replace this
+
+        // placeholder — replace this
     }
 
     // When chooseTarget() is working, add this ghost to the list in GameApp.java:
     //   new Patrol(map)
 
     @Override
-    protected Color getBodyColor() { return Color.web("#ffb8ff"); }
+    protected Color getBodyColor() { return Color.web("#ffffff"); }
 }

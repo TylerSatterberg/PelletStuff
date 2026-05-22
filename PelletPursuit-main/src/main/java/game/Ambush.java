@@ -31,8 +31,28 @@ public class Ambush extends Ghost {
         //
         // How to verify: run the game and move in one direction — the orange ghost
         // should approach from in front of you rather than chasing from behind.
+        int FutureX = Math.max(1, Math.min(player.getDx() + LOOK_AHEAD, map.rows - 2));
+        int FutureY = Math.max(1, Math.min(player.getDy() + LOOK_AHEAD, map.cols - 2));
 
-        return new int[]{ player.col(map), player.row(map) }; // placeholder — replace this
+
+        if (frightened) {
+            // Run away: target the corner farthest from the player
+            int pc = player.col(map), pr = player.row(map);
+            int targetCol, targetRow;
+            if (pc < map.cols / 2) {
+                targetCol = map.cols - 2;  // player on left  → flee right
+            } else {
+                targetCol = 1;             // player on right → flee left
+            }
+            if (pr < map.rows / 2) {
+                targetRow = map.rows - 2;  // player on top    → flee bottom
+            } else {
+                targetRow = 1;             // player on bottom → flee top
+            }
+            return new int[]{ targetCol, targetRow };
+        }
+
+        return new int[]{ player.col(map) + FutureY, player.row(map) + FutureX };
     }
 
     // When chooseTarget() is working, add this ghost to the list in GameApp.java:

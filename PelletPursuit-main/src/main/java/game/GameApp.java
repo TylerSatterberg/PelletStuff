@@ -142,7 +142,11 @@ public class GameApp extends Application {
         // Shadow is the worked example — study it before implementing the others.
         // Add each ghost here after you finish its chooseTarget() in Phase 2:
         //   new Patrol(map), new Shy(map), new Ambush(map)
-        ghosts    = new ArrayList<>(List.of(new Shadow(map)));
+        ghosts = new ArrayList<>(List.of(
+                new Shadow(map),
+                new Ambush(map),
+                new Patrol(map)
+        ));
         scoreTree = new ScoreTree();
         scoreTree.loadFromFile(SCORES_FILE);
         state  = State.READY;
@@ -154,7 +158,10 @@ public class GameApp extends Application {
         player = new Player(map);
         // Add each ghost here after you finish its chooseTarget() in Phase 2:
         //   new Patrol(map), new Shy(map), new Ambush(map)
-        ghosts = new ArrayList<>(List.of(new Shadow(map)));
+        ghosts = new ArrayList<>(List.of(
+                new Shadow(map),
+                new Ambush(map),
+                new Patrol(map)));
 
         // Resize the window only when the new layout has different pixel dimensions
         if (canvas != null &&
