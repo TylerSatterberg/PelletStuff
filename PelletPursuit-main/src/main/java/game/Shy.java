@@ -35,8 +35,66 @@ public class Shy extends Ghost {
         //
         // How to verify: run the game and walk toward Shy — it should move away
         // from you. Trap it in a dead-end corridor and it should turn and chase.
-
-        return new int[]{ player.col(map), player.row(map) }; // placeholder — replace this
+        int open = 0;
+        if (frightened){
+            return new int[]{ player.col(map), player.row(map) };
+        }
+        else{
+            int c = this.col(map);
+            int r = this.row(map);
+            if (!map.isWall(c + 1, r))
+            {
+                open ++;
+            }
+            if (!map.isWall(c - 1, r))
+            {
+                open ++;
+            }
+            if (!map.isWall(c, r + 1))
+            {
+                open ++;
+            }
+            if (!map.isWall(c, r - 1))
+            {
+                open ++;
+            }
+            if (open <= 1){
+                return new int[]{ player.col(map), player.row(map) };
+            }
+            else{
+                int pc = player.col(map);
+                int pr = player.row(map);
+                double dist = 0.0;
+                double dist1 = Math.hypot(1 - pc, 1 - pr);
+                double dist2 = Math.hypot((map.cols - 2) - pc, 1 - pr);
+                double dist3 = Math.hypot(1 - pc, (map.rows - 2) - pr);
+                double dist4 = Math.hypot((map.cols - 2) - pc, (map.rows - 2) - pr);
+                int coll = 1;
+                int roww = 1;
+                if (dist1 > dist){
+                    dist = dist1;
+                    coll = 1;
+                    roww = 1;
+                }
+                if (dist2 > dist){
+                    dist = dist2;
+                    coll = map.cols - 2;
+                    roww = 1;
+                }
+                if (dist3 > dist){
+                    dist = dist3;
+                    coll = 1;
+                    roww = map.rows - 2;
+                }
+                if (dist4 > dist){
+                    dist = dist4;
+                    coll = map.cols - 2;
+                    roww = map.rows - 2;
+                }
+                return new int[] { coll, roww };
+            }
+        }
+        // placeholder — replace this
     }
 
     // When chooseTarget() is working, add this ghost to the list in GameApp.java:

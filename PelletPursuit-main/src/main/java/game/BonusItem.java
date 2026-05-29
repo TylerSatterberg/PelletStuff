@@ -120,3 +120,9 @@ class Cherry extends BonusItem {
     @Override public String getLabel()  { return "200"; }
     @Override public Color  getColor()  { return Color.RED; }
 }
+class Treasure extends BonusItem{
+    public Treasure(double pixelX, double pixelY) { super(pixelX, pixelY, GameMap.TILE, 8.0);}
+        @Override public int getPoints() { return 1000; }
+        @Override public String getLabel() { return "1000"; }
+        @Override public Color  getColor()  { return Color.CADETBLUE; }
+}
